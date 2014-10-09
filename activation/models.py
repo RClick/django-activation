@@ -1,15 +1,10 @@
 from django.db import models
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from string import letters, digits
 from random import choice
 from datetime import datetime, timedelta
 from activation import signals
 from django.contrib.contenttypes import generic
-import logging
-
-
-User = get_user_model()
 
 
 KEY_LENGTH = getattr(settings, 'ACTIVATION_KEY_LENGTH', 80)
@@ -50,7 +45,7 @@ class ActivationManager(models.Manager):
 class Activation(models.Model):
 
     #: User to activate.
-    user = models.ForeignKey(User, related_name='activations')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='activations')
 
     #: Key.
     key = models.CharField(max_length=KEY_LENGTH)
@@ -102,7 +97,7 @@ class Invitation(models.Model):
     " An invitation is a way to let other users to be part of 'something'"
 
     #: Host member that invite the user (email).
-    host = models.ForeignKey(User, related_name='invitations')
+    host = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='invitations')
 
     #: Email of the user to invite.
     email = models.EmailField()
