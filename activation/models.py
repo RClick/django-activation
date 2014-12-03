@@ -41,6 +41,12 @@ class ActivationManager(models.Manager):
         return self.get(
             key=key, creation_date__gt=datetime.now() - timedelta(VALID_TIME))
 
+    @property
+    def valid(self):
+        " Get a queryset of all valid activations."
+        VALID_TIME = getattr(settings, 'ACTIVATION_VALID_TIME', 7)
+        return self.filter(creation_date__gt=datetime.now() - timedelta(VALID_TIME))
+
 
 class Activation(models.Model):
 
@@ -91,6 +97,12 @@ class InvitationManager(models.Manager):
         VALID_TIME = getattr(settings, 'INVITATION_VALID_TIME', 7)
         return self.get(
             key=key, creation_date__gt=datetime.now() - timedelta(VALID_TIME))
+
+    @property
+    def valid(self):
+        " Get a queryset of all valid invitations."
+        VALID_TIME = getattr(settings, 'INVITATION_VALID_TIME', 7)
+        return self.filter(creation_date__gt=datetime.now() - timedelta(VALID_TIME))
 
 
 class Invitation(models.Model):
