@@ -1,6 +1,10 @@
 from django.db import models
 from django.conf import settings
-from string import letters, digits
+from string import digits
+try:
+    from string import letters
+except ImportError:
+    from string import ascii_letters as letters
 from random import choice
 from datetime import datetime, timedelta
 from activation import signals
