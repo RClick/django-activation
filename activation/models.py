@@ -8,7 +8,10 @@ except ImportError:
 from random import choice
 from datetime import datetime, timedelta
 from activation import signals
-from django.contrib.contenttypes import generic
+try:
+    from django.contrib.contenttypes.generic import GenericForeignKey
+except ImportError:
+    from django.contrib.contenttypes.fields import GenericForeignKey
 
 
 KEY_LENGTH = getattr(settings, 'ACTIVATION_KEY_LENGTH', 80)
@@ -128,7 +131,7 @@ class Invitation(models.Model):
     #: you want.
     to_content_type = models.ForeignKey('contenttypes.ContentType')
     to_object_id = models.CharField(max_length=255)
-    to = generic.GenericForeignKey('to_content_type', 'to_object_id')
+    to = GenericForeignKey('to_content_type', 'to_object_id')
 
     #: Objects Manager
     objects = InvitationManager()
